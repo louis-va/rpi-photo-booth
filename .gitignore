@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments (if any)
+.venv/
+venv/
+env/
+
+# uv lock and build artifacts
+.uv/
+uv.lock
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Unit test / coverage reports
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+
+# Editor and IDE settings
+.vscode/
+.idea/
+*.swp
+
+# macOS and Linux junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
