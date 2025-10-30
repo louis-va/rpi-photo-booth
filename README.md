@@ -115,19 +115,19 @@ To run the photo booth automatically when your Raspberry Pi boots, set up a syst
    ```bash
    sudo nano /etc/systemd/system/photo-booth.service
    ```
-   Paste the following:
+   Paste the following: (Replace `<user>` by your username)
    ```
    [Unit]
    Description=Raspberry Pi Photo Booth
    After=network.target
 
    [Service]
-   ExecStart=/usr/bin/python3 /home/louis/rpi-photo-booth/main.py
-   WorkingDirectory=/home/louis/rpi-photo-booth
+   ExecStart=/home/<user>/.local/bin/uv run python main.py
+   WorkingDirectory=/home/<user>/rpi-photo-booth
    StandardOutput=inherit
    StandardError=inherit
    Restart=always
-   User=pi
+   User=<user>
 
    [Install]
    WantedBy=multi-user.target
