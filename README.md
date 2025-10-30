@@ -68,6 +68,8 @@ A simple Raspberry Pi-based photo booth that captures images, displays a countdo
    sudo raspi-config
    ```
    Select: `Interfacing Options -> SPI -> Yes`
+   Select: `Interfacing Options -> Serial Port -> Disable Serial Login Shell`
+   Select: `Interfacing Options -> Serial Port -> Enable Serial Interface`
 
 9. **Reboot**  
    ```
@@ -89,14 +91,8 @@ A simple Raspberry Pi-based photo booth that captures images, displays a countdo
 
 2. Install Python dependencies:
    ```
-   uv pip install -r requirements.txt
-   ```
-   Or, if using `pyproject.toml`:
-   ```
    uv pip install
    ```
-
-3. Place `JetBrainsMono-Bold.ttf` in the project directory.
 
 ## Usage
 
@@ -107,7 +103,7 @@ A simple Raspberry Pi-based photo booth that captures images, displays a countdo
    ```
 3. Run the photo booth:
    ```
-   python3 main.py
+   uv run python main.py
    ```
 4. Press the button to start the photo process.
 
