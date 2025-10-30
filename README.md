@@ -107,6 +107,43 @@ A simple Raspberry Pi-based photo booth that captures images, displays a countdo
    ```
 4. Press the button to start the photo process.
 
+## Auto-Start on Boot (systemd Service)
+
+To run the photo booth automatically when your Raspberry Pi boots, set up a systemd service:
+
+1. **Create a systemd service file:**
+   ```bash
+   sudo nano /etc/systemd/system/photo-booth.service
+   ```
+   Paste the following:
+   ```
+   [Unit]
+   Description=Raspberry Pi Photo Booth
+   After=network.target
+
+   [Service]
+   ExecStart=/usr/bin/python3 /home/louis/rpi-photo-booth/main.py
+   WorkingDirectory=/home/louis/rpi-photo-booth
+   StandardOutput=inherit
+   StandardError=inherit
+   Restart=always
+   User=pi
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+2. **Reload systemd and enable the service:**
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable photo-booth.service
+   ```
+
+3. **Start the service:**
+   ```bash
+   sudo systemctl start photo-booth.service
+   ```
+
 ## Notes
 
 - Ensure the serial printer is connected to `/dev/serial0`.
