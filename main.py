@@ -4,6 +4,8 @@ from luma.core.interface.serial import spi
 from luma.oled.device import ssd1309
 from PIL import Image, ImageDraw, ImageFont
 from escpos.printer import Serial
+from gpiozero import Button
+from signal import pause
 import time
 
 OLED_WIDTH = 128
@@ -19,6 +21,7 @@ FONT_SIZE_LARGE = 20
 FONT_SIZE_SMALL = 16
 PRINTER_DEV = "/dev/serial0"
 PRINTER_BAUD = 9600
+BUTTON_GPIO = 17
 
 # Hardware Initialization
 def init_oled():
@@ -33,6 +36,10 @@ def init_camera():
     picam2.configure(picam2.create_preview_configuration(main={"size": (IMG_SIZE, IMG_SIZE)}))
     picam2.start()
     return picam2
+
+def init_button():
+    button = Button(BUTTON_GPIO)
+    return button
 
 def load_fonts():
     font_large = ImageFont.truetype(FONT_PATH, FONT_SIZE_LARGE)
@@ -70,16 +77,18 @@ def display_printing(oled, font_small):
     oled.display(canvas)
 
 # Main Logic
-def main():
+def start_photo_process():
+    # init
     oled = init_oled()
     printer = init_printer()
     picam2 = init_camera()
     font_large, font_small = load_fonts()
 
-    counter = 0
-    countdown = COUNTDOWN_START
-
     try:
+        # start counter
+        counter = 0
+        countdown = COUNTDOWN_START
+
         # Countdown loop
         while counter < COUNTDOWN_FRAMES:
             frame = picam2.capture_array()
@@ -105,14 +114,26 @@ def main():
 
         # Print image
         printer.image(img, impl="bitImageRaster")
-        printer.text("\n\n\n\n")
+        printer.text("\n\n\n")
         printer.close()
 
     except KeyboardInterrupt:
-        print("Stopped preview.")
+        print("Stopped photo process.")
+    except Exception as e:
+        print(e)
     finally:
         oled.clear()
         picam2.stop()
+        picam2.close()
+
+def main():
+    try:
+        button = init_button()
+        while True:
+            button.wait_for_press()
+            start_photo_process()
+    except KeyboardInterrupt:
+        print("Stopped main process.")
 
 if __name__ == "__main__":
     main()
